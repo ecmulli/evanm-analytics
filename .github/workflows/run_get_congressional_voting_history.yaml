@@ -35,5 +35,5 @@ jobs:
             - name: Run get_congressional_voting_history.py
               env:
                 ENV: ${{ github.ref == 'refs/heads/main' && 'prod' || 'staging' }}
-                GCS_CREDS: ${{ secrets.BIGQUERY_CREDS }}
+                BIGQUERY_CREDS: ${{ secrets.BIGQUERY_CREDS }}
               run: python -m scripts.get_congressional_voting_history
