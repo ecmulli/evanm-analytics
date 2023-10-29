@@ -29,19 +29,19 @@ logging.basicConfig(
 )
 
 def get_members():
-    members = pd.read_csv('data/Voteview Members.csv')
+    members = pd.read_csv('https://voteview.com/static/data/out/members/HSall_members.csv')
     members = members[['congress', 'chamber', 'icpsr', 'state_abbrev', 'district_code', 'bioname', 'party_code']]
 
     return members
 
 def get_parties():
-    parties = pd.read_csv('data/HSall parties.csv')
+    parties = pd.read_csv('https://voteview.com/static/data/out/parties/HSall_parties.csv')
     parties = parties[['congress', 'chamber', 'party_code', 'party_name', 'n_members']]
 
     return parties
 
 def get_votes():
-    votes = pd.read_csv('data/Voteview All Votes.csv')
+    votes = pd.read_csv('https://voteview.com/static/data/out/votes/HSall_votes.csv')
     vote_codes = pd.DataFrame(
         data={
             'cast_code':[0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
@@ -54,7 +54,7 @@ def get_votes():
     return votes
 
 def get_bills():
-    bills = pd.read_csv('data/HSall rollcalls.csv')
+    bills = pd.read_csv('https://voteview.com/static/data/out/rollcalls/HSall_rollcalls.csv')
     bills = bills[['congress', 'chamber', 'rollnumber', 'date', 'bill_number', 'vote_result', 'vote_desc', 'vote_question', 'dtl_desc']]
     return bills
 
