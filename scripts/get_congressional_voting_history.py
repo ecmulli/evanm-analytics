@@ -10,6 +10,7 @@ import pandas as pd
 import requests
 from datetime import datetime
 
+# set up environment
 from dotenv import load_dotenv
 load_dotenv()
 import os

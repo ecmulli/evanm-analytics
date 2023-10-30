@@ -9,6 +9,7 @@ on:
         - main
         paths:
             - 'scripts/get_congressional_voting_history.py'        
+            
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
     cancel-in-progress: true
