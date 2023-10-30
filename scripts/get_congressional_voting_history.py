@@ -19,7 +19,10 @@ BQ_CREDENTIALS = service_account.Credentials.from_service_account_info(
     json.loads(os.getenv("BIGQUERY_CREDS"))
 )
 
-DESTINATION_TABLE = f'congress.voting_history'
+MEMBERS_TABLE_NAME = f'congress.members'
+PARTIES_TABLE_NAME = f'congress.parties'
+VOTES_TABLE_NAME = f'congress.votes'
+BILLS_TABLE_NAME = f'congress.bills'
 
 import logging
 log_level = getattr(logging, os.getenv("LOG_LEVEL"))
@@ -64,30 +67,45 @@ if __name__ == '__main__':
 
     logging.info('Importing members')
     members = get_members()
+    # log the number of members we are writing to bigquery
+    logging.info(f'Writing {len(members)} members to bigquery')
+    members.to_gbq(
+        destination_table=MEMBERS_TABLE_NAME,
+        project_id=os.getenv("BIGQUERY_PROJECT"),
+        if_exists='replace',
+        credentials=BQ_CREDENTIALS
+    )
     logging.info('Importing parties')
     parties = get_parties()
-
-    logging.info('Combining members and parties')
-    members_party = members.merge(parties, on=['party_code', 'congress', 'chamber'], how='left')
-
-    logging.info('Importing votes')
-    votes = get_votes()
-
-    logging.info('Importing bills')
-    bills = get_bills()
-
-    logging.info('Combining votes and bills')
-    votes_bills = votes.merge(bills, on=['congress', 'chamber', 'rollnumber'], how='left')
-    
-    logging.info('Combining members_party and votes_bills')
-    all_votes = votes_bills.merge(members_party, on=['congress', 'chamber', 'icpsr'], how='left')
-
-    logging.info('Writing to bigquery')
-    all_votes.to_gbq(
-        destination_table=DESTINATION_TABLE,
+    # log the number of parties we are writing to bigquery
+    logging.info(f'Writing {len(parties)} parties to bigquery')
+    parties.to_gbq(
+        destination_table=PARTIES_TABLE_NAME,
         project_id=os.getenv("BIGQUERY_PROJECT"),
         if_exists='replace',
         credentials=BQ_CREDENTIALS
     )
 
-    logging.info('Finished get_congressional_voting_history.py')
+    logging.info('Importing votes')
+    votes = get_votes()
+    # log the number of votes we are writing to bigquery
+    logging.info(f'Writing {len(votes)} votes to bigquery')
+    votes.to_gbq(
+        destination_table=VOTES_TABLE_NAME,
+        project_id=os.getenv("BIGQUERY_PROJECT"),
+        if_exists='replace',
+        credentials=BQ_CREDENTIALS
+    )
+
+    logging.info('Importing bills')
+    bills = get_bills()
+    # log the number of bills we are writing to bigquery
+    logging.info(f'Writing {len(bills)} bills to bigquery')
+    bills.to_gbq(
+        destination_table=BILLS_TABLE_NAME,
+        project_id=os.getenv("BIGQUERY_PROJECT"),
+        if_exists='replace',
+        credentials=BQ_CREDENTIALS
+    )
+
+    logging.info('Successfully finished get_congressional_voting_history.py')

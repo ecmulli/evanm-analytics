@@ -13,7 +13,7 @@ concurrency:
     group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
     cancel-in-progress: true
 jobs:
-    build_env:
+    run_get_congressional_voting_history:
         runs-on: ubuntu-latest
 
         steps:
