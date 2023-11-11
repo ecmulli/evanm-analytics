@@ -1,3 +1,8 @@
+# Repo Specific
+data/
+.env
+*.ipynb
+*.json
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
