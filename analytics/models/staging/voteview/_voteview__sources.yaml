@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: voteview
+    schema: voteview_staging
+    tables:
+      - name: bills
+      - name: members
+      - name: parties
+      - name: votes

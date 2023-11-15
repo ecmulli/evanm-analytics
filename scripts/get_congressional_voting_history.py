@@ -19,11 +19,12 @@ import json
 BQ_CREDENTIALS = service_account.Credentials.from_service_account_info(
     json.loads(os.getenv("BIGQUERY_CREDS"))
 )
+ENV = os.getenv("ENV")
 
-MEMBERS_TABLE_NAME = f'congress.members'
-PARTIES_TABLE_NAME = f'congress.parties'
-VOTES_TABLE_NAME = f'congress.votes'
-BILLS_TABLE_NAME = f'congress.bills'
+MEMBERS_TABLE_NAME = f'voteview_{ENV}.members'
+PARTIES_TABLE_NAME = f'voteview_{ENV}.parties'
+VOTES_TABLE_NAME = f'voteview_{ENV}.votes'
+BILLS_TABLE_NAME = f'voteview_{ENV}.bills'
 
 import logging
 log_level = getattr(logging, os.getenv("LOG_LEVEL"))
@@ -72,7 +73,7 @@ if __name__ == '__main__':
     logging.info(f'Writing {len(members)} members to bigquery')
     members.to_gbq(
         destination_table=MEMBERS_TABLE_NAME,
-        project_id=os.getenv("BIGQUERY_PROJECT"),
+        project_id=BQ_CREDENTIALS.project_id,
         if_exists='replace',
         credentials=BQ_CREDENTIALS
     )
@@ -82,7 +83,7 @@ if __name__ == '__main__':
     logging.info(f'Writing {len(parties)} parties to bigquery')
     parties.to_gbq(
         destination_table=PARTIES_TABLE_NAME,
-        project_id=os.getenv("BIGQUERY_PROJECT"),
+        project_id=BQ_CREDENTIALS.project_id,
         if_exists='replace',
         credentials=BQ_CREDENTIALS
     )
@@ -93,7 +94,7 @@ if __name__ == '__main__':
     logging.info(f'Writing {len(votes)} votes to bigquery')
     votes.to_gbq(
         destination_table=VOTES_TABLE_NAME,
-        project_id=os.getenv("BIGQUERY_PROJECT"),
+        project_id=BQ_CREDENTIALS.project_id,
         if_exists='replace',
         credentials=BQ_CREDENTIALS
     )
@@ -104,7 +105,7 @@ if __name__ == '__main__':
     logging.info(f'Writing {len(bills)} bills to bigquery')
     bills.to_gbq(
         destination_table=BILLS_TABLE_NAME,
-        project_id=os.getenv("BIGQUERY_PROJECT"),
+        project_id=BQ_CREDENTIALS.project_id,
         if_exists='replace',
         credentials=BQ_CREDENTIALS
     )
